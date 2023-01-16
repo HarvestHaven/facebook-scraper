@@ -14,6 +14,8 @@
 
 ## Ideas
 
+### Scrapy Spiders
+
 1. > Just rent cheap virtual cloud based server at Digital Ocean (or any other provider) and use cron to schedule your jobs
     
 	[Where to deploy scrapers](https://www.quora.com/Where-do-I-deploy-my-scrapers-so-that-theyll-be-executed-regularly)
@@ -21,4 +23,9 @@
 	[Best Answer?](https://qr.ae/prA1p1)
 
 2. [Scrapy Providers](https://www.scrapehero.com/web-scraping-cloud-providers/)
-3. 
+
+
+### Try Ionic for Mobile deployments
+
+1. [Ionic Documentation](https://ionicframework.com/docs/)
+
