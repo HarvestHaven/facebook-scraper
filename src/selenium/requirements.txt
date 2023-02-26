@@ -3,4 +3,3 @@ beautifulsoup4
 requests
 gitpython
 
-## Run `pip install selenium beautifulsoup4 requests gitpython`

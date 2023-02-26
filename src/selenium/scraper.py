@@ -47,9 +47,6 @@ class FBPageProcessor:
 
   def __get_processor(self, url):
     url_elems = url.split('/')
-    print(url_elems)
-    return
-  
     if 'posts' in url_elems:
       return self.__process_post
     elif 'videos' in url_elems:
@@ -221,12 +218,16 @@ def expand_and_download_page(main_folder, html_file_path, url):
     comments = driver.find_element_by_xpath("//div[@id='contentArea']//span/a[contains(text(), 'Comment')]")
     driver.execute_script("arguments[0].click();", comments)
 
-    most_relevant_xpath = "//div[@id='contentArea']//a[contains(text(), 'Most relevant') or contains(text(), 'Most Relevant')]"
-    all_comments_menu = wait.until(EC.presence_of_element_located((By.XPATH, most_relevant_xpath)))
-    driver.execute_script("arguments[0].click();", all_comments_menu)
+    try:
+      short_wait = WebDriverWait(driver, 3)
+      most_relevant_xpath = "//div[@id='contentArea']//a[contains(text(), 'Most relevant') or contains(text(), 'Most Relevant')]"
+      all_comments_menu = short_wait.until(EC.presence_of_element_located((By.XPATH, most_relevant_xpath)))
+      driver.execute_script("arguments[0].click();", all_comments_menu)
 
-    all_comments = wait.until(EC.presence_of_element_located((By.XPATH, "//a[.//div[contains(text(), 'Show all comments, including potential spam')]]")))
-    driver.execute_script("arguments[0].click();", all_comments)
+      all_comments = short_wait.until(EC.presence_of_element_located((By.XPATH, "//a[.//div[contains(text(), 'Show all comments, including potential spam')]]")))
+      driver.execute_script("arguments[0].click();", all_comments)
+    except TimeoutException:
+      pass
 
     more_replies_xpath = "//div[@id='contentArea']//a[div/span[contains(text(),'View') and (contains(text(),'more replies') or contains(text(),'more comment'))]]"
     expand_all(driver, more_replies_xpath)
@@ -250,10 +251,7 @@ def expand_and_download_page(main_folder, html_file_path, url):
   driver.quit()
 
 
-def expand_and_process_post(root_folder = "", post_url = ""):
-  # if root_folder == "" or root_folder == Null:
-  # if(len(root_folder) == 0):
-    # raise Exception('The root_folder cannot be empty!')
+def expand_and_process_post(root_folder, post_url):
   main_folder = os.path.join(os.path.abspath(root_folder), post_url.split('/')[-1])
   git = GitHelper(main_folder)
   proc = FBPageProcessor(main_folder, post_url)
@@ -264,9 +262,8 @@ def expand_and_process_post(root_folder = "", post_url = ""):
 
 if __name__== "__main__":
   parser = argparse.ArgumentParser(description='The script expends a FB page on the given URL and downloads the page for offline use.')
-  parser.add_argument('--root', metavar='rootfolder', help='Root folder for the downloaded resources')
-  parser.add_argument('--url', metavar='url', help='FB resource URL')
+  parser.add_argument('rootfolder', metavar='root', help='Root folder for the downloaded resources')
+  parser.add_argument('url', metavar='url', help='FB resource URL')
   args = parser.parse_args()
 
-  # print(args);
-  expand_and_process_post(args.root, args.url)
+  expand_and_process_post(args.rootfolder, args.url)
