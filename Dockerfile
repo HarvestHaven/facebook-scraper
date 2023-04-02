@@ -8,7 +8,7 @@ RUN curl -O https://chromedriver.storage.googleapis.com/111.0.5563.64/chromedriv
 
 ENV PATH "$PATH:/var/chrome"
 
-RUN apt-get update && apt-get install -y chromium=111.0.5563.64-1~deb11u1
+RUN apt-get update && apt-get install -y chromium=111.0.5563.110-1~deb11u1
 
 COPY src/* /app/
 
